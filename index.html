@@ -300,6 +300,12 @@
     width:100%;
     font-size:13px;
   }
+  .file-slot{
+    margin-bottom:8px;
+  }
+  .file-slot:last-child{
+    margin-bottom:0;
+  }
 </style>
 </head>
 <body>
@@ -396,8 +402,10 @@
       </div>
 
       <div class="field">
-        <label class="field-label">平面圖 / 現況照片<span class="badge-optional">選填,單檔上限 5MB</span></label>
-        <input type="file" name="attachments[]" multiple accept="image/*,.pdf">
+        <label class="field-label">平面圖 / 現況照片<span class="badge-optional">選填,最多 3 個檔案,單檔上限 5MB</span></label>
+        <div class="file-slot"><input type="file" name="attachment1" accept="image/*,.pdf"></div>
+        <div class="file-slot"><input type="file" name="attachment2" accept="image/*,.pdf"></div>
+        <div class="file-slot"><input type="file" name="attachment3" accept="image/*,.pdf"></div>
       </div>
     </div>
 
@@ -684,8 +692,10 @@
         </div>
 
         <div class="field">
-          <label class="field-label">上傳喜歡風格的參考圖片<span class="badge-optional">選填,可多選,單檔上限 5MB</span></label>
-          <input type="file" name="風格參考圖片[]" multiple accept="image/*">
+          <label class="field-label">上傳喜歡風格的參考圖片<span class="badge-optional">選填,最多 3 張,單檔上限 5MB</span></label>
+          <div class="file-slot"><input type="file" name="attachment4" accept="image/*"></div>
+          <div class="file-slot"><input type="file" name="attachment5" accept="image/*"></div>
+          <div class="file-slot"><input type="file" name="attachment6" accept="image/*"></div>
           <p class="hint">截圖、拍照或存下來的喜歡案例都可以直接上傳。</p>
         </div>
       </div>
@@ -826,6 +836,7 @@
 
     <div class="submit-bar">
       <button type="submit">送出需求表單</button>
+      <p class="hint" style="margin-top:10px;">所有上傳檔案合計不要超過 10MB,若照片較多或較大,歡迎直接寄到我的信箱補充。</p>
     </div>
   </form>
 
