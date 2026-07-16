@@ -290,6 +290,47 @@
   button[type=submit]:hover{
     background:var(--accent-dark);
   }
+  button[type=submit]:disabled{
+    opacity:0.7;
+    cursor:not-allowed;
+  }
+  .submit-error{
+    display:none;
+    color:#a33d2f;
+    background:#fbeae6;
+    border:1px solid #e6c3ba;
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:13px;
+    margin-top:12px;
+    text-align:left;
+  }
+  .thankyou-panel{
+    display:none;
+    text-align:center;
+    padding:52px 24px;
+  }
+  .thankyou-icon{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    background:var(--accent-soft);
+    color:var(--accent-dark);
+    font-size:32px;
+    line-height:64px;
+    margin:0 auto 18px;
+  }
+  .thankyou-panel h2{
+    font-size:20px;
+    margin-bottom:10px;
+  }
+  .thankyou-panel p{
+    color:var(--ink-soft);
+    font-size:14px;
+    line-height:1.7;
+    max-width:420px;
+    margin:0 auto;
+  }
   .footnote{
     text-align:center;
     color:var(--ink-soft);
@@ -318,7 +359,7 @@
     <p>花 3-5 分鐘填寫,讓我們更快讀懂你的生活習慣、收納需求與預算時程。<br>想直接說得更完整也沒問題,下方可展開深度訪談。</p>
   </header>
 
-  <form id="intakeForm" action="https://formsubmit.co/gn1999201@gmail.com" method="POST" enctype="multipart/form-data">
+  <form id="intakeForm" action="https://formsubmit.co/04a29de3057c74f1353b5bf175a82493" method="POST" enctype="multipart/form-data">
 
     <!-- FormSubmit 設定用隱藏欄位 -->
     <input type="hidden" name="_subject" value="【新收到】裝潢設計需求訪談表">
@@ -835,12 +876,19 @@
     </div>
 
     <div class="submit-bar">
-      <button type="submit">送出需求表單</button>
+      <button type="submit" id="submitBtn">送出需求表單</button>
       <p class="hint" style="margin-top:10px;">所有上傳檔案合計不要超過 10MB,若照片較多或較大,歡迎直接寄到我的信箱補充。</p>
+      <p class="submit-error" id="submitError">傳送時發生問題,請確認網路連線後再試一次;若持續失敗,歡迎直接把需求寄到 gn1999201@gmail.com。</p>
     </div>
   </form>
 
-  <p class="footnote">填寫完成後,我們會在 1-2 個工作日內與你聯繫。所有資料僅用於了解你的居家需求,不會作其他用途。</p>
+  <div class="thankyou-panel" id="thankyouPanel">
+    <div class="thankyou-icon">✓</div>
+    <h2>已收到你的需求 謝謝!</h2>
+    <p>我們會在 1-2 個工作日內與你聯繫,進一步了解細節並安排討論時間。如果臨時想到還有什麼想補充的,也歡迎直接寄信到 gn1999201@gmail.com。</p>
+  </div>
+
+  <p class="footnote" id="footnoteText">填寫完成後,我們會在 1-2 個工作日內與你聯繫。所有資料僅用於了解你的居家需求,不會作其他用途。</p>
 </div>
 
 <script>
@@ -890,6 +938,41 @@
       ? '－ 收合完整訪談(已展開,可略過直接送出)'
       : '＋ 我想直接完整說明我的需求(進階,約10分鐘)';
     if(open){ fullSection.scrollIntoView({behavior:'smooth', block:'start'}); }
+  });
+
+  // 送出表單:改用 AJAX 送出,成功後在同一頁顯示感謝訊息,不跳轉到 FormSubmit 的頁面
+  var intakeForm = document.getElementById('intakeForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var submitError = document.getElementById('submitError');
+  var thankyouPanel = document.getElementById('thankyouPanel');
+  var footnoteText = document.getElementById('footnoteText');
+  var AJAX_ACTION = 'https://formsubmit.co/ajax/04a29de3057c74f1353b5bf175a82493';
+
+  intakeForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    submitError.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = '傳送中...';
+
+    var formData = new FormData(intakeForm);
+
+    fetch(AJAX_ACTION, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    }).then(function(res){
+      if(!res.ok){ throw new Error('送出失敗'); }
+      return res.json();
+    }).then(function(){
+      intakeForm.style.display = 'none';
+      footnoteText.style.display = 'none';
+      thankyouPanel.style.display = 'block';
+      thankyouPanel.scrollIntoView({behavior:'smooth', block:'start'});
+    }).catch(function(){
+      submitError.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = '送出需求表單';
+    });
   });
 </script>
 </body>
