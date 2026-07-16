@@ -141,6 +141,10 @@
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:14px;
+    margin-bottom:16px;
+  }
+  .row2:last-child{
+    margin-bottom:0;
   }
   @media (max-width:520px){
     .row2{grid-template-columns:1fr;}
@@ -263,15 +267,10 @@
     display:block;
   }
   .badge-optional{
-    display:inline-block;
-    white-space:nowrap;
-    font-size:11px;
+    display:inline;
+    font-size:12px;
     font-weight:500;
     color:var(--ink-soft);
-    background:var(--bg);
-    border:1px solid var(--line);
-    padding:2px 8px;
-    border-radius:999px;
     margin-left:6px;
   }
   .cond-detail{
